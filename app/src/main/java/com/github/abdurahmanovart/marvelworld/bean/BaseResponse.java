@@ -18,14 +18,14 @@ public class BaseResponse implements Parcelable {
     public static final ClassCreator CREATOR = new ClassCreator();
 
     @JsonProperty("code")
-    public int mCode;
+    private int mCode;
 
     public int getCode() {
         return mCode;
     }
 
     @JsonProperty("data")
-    public ResponseData mResponseData;
+    private ResponseData mResponseData;
 
     public ResponseData getResponseData() {
         return mResponseData;

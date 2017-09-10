@@ -15,14 +15,14 @@ public class Comic implements Parcelable {
     public static final ClassCreator CREATOR = new ClassCreator();
 
     @JsonProperty("resourceURI")
-    public String mResourceUri;
+    private String mResourceUri;
 
     public String getResourceUri() {
         return mResourceUri;
     }
 
     @JsonProperty("name")
-    public String mName;
+    private String mName;
 
     public String getName() {
         return mName;
