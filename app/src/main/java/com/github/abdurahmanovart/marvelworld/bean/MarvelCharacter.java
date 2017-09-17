@@ -23,6 +23,13 @@ class MarvelCharacter implements Parcelable {
     public String getName() {
         return mName;
     }
+//
+//    @JsonProperty("title")
+//    private String mTitle;
+//
+//    public String getTitle() {
+//        return mTitle;
+//    }
 
     @JsonProperty("thumbnail")
     private Thumbnail mThumbnail;

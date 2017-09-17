@@ -79,7 +79,7 @@ public class BaseResponse implements Parcelable {
                 .toString();
     }
 
-    public static final class ClassCreator implements Creator<BaseResponse> {
+    private static final class ClassCreator implements Creator<BaseResponse> {
         @Override
         public BaseResponse createFromParcel(Parcel in) {
             return new BaseResponse(in);
