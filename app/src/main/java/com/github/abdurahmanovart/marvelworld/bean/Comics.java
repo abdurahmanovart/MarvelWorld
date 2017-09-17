@@ -15,7 +15,7 @@ import java.util.List;
  * @author Abdurakhmanov on 10.09.17
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Comics implements Parcelable {
+public class Comics implements Parcelable {
 
     public static final ClassCreator CREATOR = new ClassCreator();
 

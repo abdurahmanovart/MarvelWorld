@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
@@ -13,17 +14,17 @@ import java.util.List;
 /**
  * @author Abdurakhmanov on 10.09.17
  */
-
-class ResponseData implements Parcelable {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ResponseData<T> implements Parcelable {
 
     public ResponseData() {
         //Empty constructor needed by Jackson
     }
 
     @JsonProperty("results")
-    private List<MarvelCharacter> mCharacterList;
+    private List<T> mCharacterList;
 
-    public List<MarvelCharacter> getCharacterList() {
+    public List<T> getCharacterList() {
         return mCharacterList;
     }
 

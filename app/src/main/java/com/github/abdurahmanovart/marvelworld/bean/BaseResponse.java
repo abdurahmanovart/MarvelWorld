@@ -13,7 +13,7 @@ import com.google.common.base.Objects;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BaseResponse implements Parcelable {
+public class BaseResponse<T> implements Parcelable {
 
     public static final ClassCreator CREATOR = new ClassCreator();
 
@@ -25,7 +25,7 @@ public class BaseResponse implements Parcelable {
     }
 
     @JsonProperty("data")
-    private ResponseData mResponseData;
+    private ResponseData<T> mResponseData;
 
     public ResponseData getResponseData() {
         return mResponseData;
