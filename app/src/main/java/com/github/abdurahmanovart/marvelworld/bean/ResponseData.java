@@ -21,7 +21,7 @@ class ResponseData implements Parcelable {
     }
 
     @JsonProperty("results")
-    public List<MarvelCharacter> mCharacterList;
+    private List<MarvelCharacter> mCharacterList;
 
     public List<MarvelCharacter> getCharacterList() {
         return mCharacterList;

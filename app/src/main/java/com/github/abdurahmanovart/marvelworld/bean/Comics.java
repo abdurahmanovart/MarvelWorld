@@ -20,14 +20,14 @@ class Comics implements Parcelable {
     public static final ClassCreator CREATOR = new ClassCreator();
 
     @JsonProperty("collectionURI")
-    public String mCollectionUri;
+    private String mCollectionUri;
 
     public String getCollectionUri() {
         return mCollectionUri;
     }
 
     @JsonProperty("items")
-    public List<Comic> mComicList;
+    private List<Comic> mComicList;
 
     public List<Comic> getComicList() {
         return mComicList;

@@ -18,35 +18,42 @@ class MarvelCharacter implements Parcelable {
     public static final ClassCreator CREATOR = new ClassCreator();
 
     @JsonProperty("name")
-    public String mName;
+    private String mName;
 
     public String getName() {
         return mName;
     }
+//
+//    @JsonProperty("title")
+//    private String mTitle;
+//
+//    public String getTitle() {
+//        return mTitle;
+//    }
 
     @JsonProperty("thumbnail")
-    public Thumbnail mThumbnail;
+    private Thumbnail mThumbnail;
 
     public Thumbnail getThumbnail() {
         return mThumbnail;
     }
 
     @JsonProperty("description")
-    public String mDescription;
+    private String mDescription;
 
     public String getDescription() {
         return mDescription;
     }
 
     @JsonProperty("resourceURI")
-    public String mResourceUri;
+    private String mResourceUri;
 
     public String getResourceUri() {
         return mResourceUri;
     }
 
     @JsonProperty("comics")
-    public Comics mComics;
+    private Comics mComics;
 
     public Comics getComics() {
         return mComics;

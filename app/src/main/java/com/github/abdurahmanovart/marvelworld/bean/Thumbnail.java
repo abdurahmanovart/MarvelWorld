@@ -31,14 +31,14 @@ class Thumbnail implements Parcelable {
     public static final ClassCreator CREATOR = new ClassCreator();
 
     @JsonProperty("path")
-    public String mPath;
+    private String mPath;
 
     public String getPath() {
         return mPath;
     }
 
     @JsonProperty("extension")
-    public String mExtension;
+    private String mExtension;
 
     public String getExtension() {
         return mExtension;
