@@ -1,7 +1,5 @@
 package com.github.abdurahmanovart.marvelworld.net;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -13,12 +11,12 @@ public class ApiClient {
     public static final String BASE_URL = "http://gateway.marvel.com";
     private static Retrofit sRetrofit;
 
-    private ApiClient(){
+    private ApiClient() {
         throw new IllegalStateException("can't create object");
     }
 
-    public static Retrofit getClient(){
-        if (sRetrofit == null){
+    public static Retrofit getClient() {
+        if (sRetrofit == null) {
             sRetrofit = new Retrofit.Builder().
                     baseUrl(BASE_URL)
                     .addConverterFactory(JacksonConverterFactory.create())
