@@ -3,11 +3,13 @@ package com.github.abdurahmanovart.marvelworld;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -18,7 +20,6 @@ import com.github.abdurahmanovart.marvelworld.net.ApiClient;
 import com.github.abdurahmanovart.marvelworld.net.MarvelService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,10 +27,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CharacterFragment.OnItemClickListener {
 
     public static final String API_KEY = "181a9f0e6d0b25babcb3cdf1c7075dd5";
     public static final String HASH = "cc07634e8e625376a3054614629a51ef";
+    public static final String TAG = MainActivity.class.getSimpleName();
+
+    private MarvelService mService;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -44,11 +48,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
-        initUI();
+        initToolbar();
     }
 
-    private void initUI() {
+    @Override
+    public void onFragmentInteraction(MarvelCharacter character) {
+        startActivity(CharacterActivity.createExplicitIntent(this, character));
+    }
+
+    //region private method
+
+    private void initToolbar() {
         setSupportActionBar(mToolbar);
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         mSearchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
@@ -58,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
                 if (Utils.hasConnection(getApplicationContext())) {
                     showProgressBar();
                     getDataFromServer(query);
+                    mSearchView.clearFocus();
                 } else {
                     showNoConnectionMessage();
                 }
                 return true;
-
             }
 
             @Override
@@ -72,32 +84,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void showProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
-    private void showNoConnectionMessage() {
-        Toast.makeText(this, R.string.no_connection, Toast.LENGTH_LONG).show();
+    private void hideProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
+    }
 
+    private void showNoConnectionMessage() {
+        Toast.makeText(this, R.string.no_connection, Toast.LENGTH_SHORT).show();
     }
 
     private void getDataFromServer(String query) {
-        MarvelService service = ApiClient.getClient().create(MarvelService.class);
-        Call<BaseResponse<MarvelCharacter>> responseCall = service.getCharacters(query, API_KEY, 123, HASH);
+        mService = ApiClient.getClient().create(MarvelService.class);
+        Call<BaseResponse<MarvelCharacter>> responseCall = mService.getCharacters(query, API_KEY, 1, HASH);
 
         responseCall.enqueue(new Callback<BaseResponse<MarvelCharacter>>() {
             @Override
-            public void onResponse(Call<BaseResponse<MarvelCharacter>> call, Response<BaseResponse<MarvelCharacter>> response) {
+            public void onResponse(@NonNull Call<BaseResponse<MarvelCharacter>> call, @NonNull Response<BaseResponse<MarvelCharacter>> response) {
                 BaseResponse baseResponse = response.body();
                 if (baseResponse != null) {
+                    hideProgressBar();
                     showData(new ArrayList<>(baseResponse.getResponseData().getCharacterList()));
                 }
             }
 
             @Override
             public void onFailure(Call<BaseResponse<MarvelCharacter>> call, Throwable t) {
-
+                Log.e(TAG, "failure with message" + t.getMessage());
             }
         });
     }
@@ -110,29 +125,5 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-//    private void getResource(final BaseResponse<MarvelCharacter> response) {
-//        List<MarvelCharacter> list = response.getResponseData().getCharacterList();
-//        MarvelCharacter character = list.get(0);
-//        String url = character.getComics().getComicList().get(0).getResourceUri();
-//
-//        MarvelService service = ApiClient.getClient().create(MarvelService.class);
-//        Call<BaseResponse<MarvelResource>> responseCall = service.getMarvelResources(url, API_KEY, 123, HASH);
-//
-//        responseCall.enqueue(new Callback<BaseResponse<MarvelResource>>() {
-//            @Override
-//            public void onResponse(Call<BaseResponse<MarvelResource>> call, Response<BaseResponse<MarvelResource>> response) {
-//                BaseResponse<MarvelResource> baseResponse = response.body();
-//                if (baseResponse != null) {
-//                    System.out.println(baseResponse.getResponseData().toString());
-//                } else {
-//                    System.out.println("null it is");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<BaseResponse<MarvelResource>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
+    //endregion
 }

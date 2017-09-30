@@ -2,12 +2,14 @@ package com.github.abdurahmanovart.marvelworld.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,37 +24,11 @@ public class MarvelCharacter implements Parcelable {
     @JsonProperty("name")
     private String mName;
 
-    public String getName() {
-        return mName;
-    }
-//
-//    @JsonProperty("title")
-//    private String mTitle;
-//
-//    public String getTitle() {
-//        return mTitle;
-//    }
-
     @JsonProperty("description")
     private String mDescription;
 
-    public String getDescription() {
-        return mDescription;
-    }
-
     @JsonProperty("thumbnail")
     private Thumbnail mThumbnail;
-
-    public Thumbnail getThumbnail() {
-        return mThumbnail;
-    }
-
-    @JsonProperty("resourceURI")
-    private String mResourceUri;
-
-    public String getResourceUri() {
-        return mResourceUri;
-    }
 
     @JsonProperty("comics")
     private Comics mComics;
@@ -60,34 +36,17 @@ public class MarvelCharacter implements Parcelable {
     @JsonProperty("urls")
     private List<MarvelUrl> mUrls;
 
-    public List<MarvelUrl> getUrls() {
-        return mUrls;
-    }
-
-    public Comics getComics() {
-        return mComics;
-    }
-
     public MarvelCharacter() {
-        //Empty constructor needed by Jackson
+        //empty constructor needed by Jackson
     }
 
     protected MarvelCharacter(Parcel in) {
         mName = in.readString();
         mDescription = in.readString();
         mThumbnail = in.readParcelable(Thumbnail.class.getClassLoader());
-        mResourceUri = in.readString();
         mComics = in.readParcelable(Comics.class.getClassLoader());
-    }
-
-    @JsonIgnore
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mName);
-        dest.writeString(mDescription);
-        dest.writeParcelable(mThumbnail, flags);
-        dest.writeString(mResourceUri);
-        dest.writeParcelable(mComics, flags);
+        mUrls = new ArrayList<>();
+        in.readTypedList(mUrls, MarvelUrl.CREATOR);
     }
 
     @JsonIgnore
@@ -98,25 +57,65 @@ public class MarvelCharacter implements Parcelable {
 
     @JsonIgnore
     @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mName);
+        dest.writeString(mDescription);
+        dest.writeParcelable(mThumbnail, flags);
+        dest.writeParcelable(mComics, flags);
+        dest.writeTypedList(mUrls);
+    }
+
+    //region Getters
+
+    @NonNull
+    public String getName() {
+        return mName;
+    }
+
+    @NonNull
+    public String getDescription() {
+        return mDescription;
+    }
+
+    @NonNull
+    public Thumbnail getThumbnail() {
+        return mThumbnail;
+    }
+
+    @NonNull
+    public Comics getComics() {
+        return mComics;
+    }
+
+    public List<MarvelUrl> getUrls() {
+        return mUrls;
+    }
+
+    //endregion
+
+    //region Equals, hashCode, toString
+
+    @JsonIgnore
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MarvelCharacter that = (MarvelCharacter) o;
         return Objects.equal(mName, that.mName) &&
-                Objects.equal(mThumbnail, that.mThumbnail) &&
                 Objects.equal(mDescription, that.mDescription) &&
-                Objects.equal(mResourceUri, that.mResourceUri) &&
-                Objects.equal(mComics, that.mComics);
+                Objects.equal(mThumbnail, that.mThumbnail) &&
+                Objects.equal(mComics, that.mComics) &&
+                Objects.equal(mUrls, that.mUrls);
     }
 
     @JsonIgnore
     @Override
     public int hashCode() {
         return Objects.hashCode(mName,
-                mThumbnail,
                 mDescription,
-                mResourceUri,
-                mComics);
+                mThumbnail,
+                mComics,
+                mUrls);
     }
 
     @JsonIgnore
@@ -124,12 +123,14 @@ public class MarvelCharacter implements Parcelable {
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("mName", mName)
-                .add("mThumbnail", mThumbnail)
                 .add("mDescription", mDescription)
-                .add("mResourceUri", mResourceUri)
+                .add("mThumbnail", mThumbnail)
                 .add("mComics", mComics)
+                .add("mUrls", mUrls)
                 .toString();
     }
+
+    //endregion
 
     private static final class ClassCreator implements Creator<MarvelCharacter> {
         @Override

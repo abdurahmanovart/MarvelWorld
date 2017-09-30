@@ -19,18 +19,19 @@ public class MarvelUrl implements Parcelable {
     @JsonProperty("type")
     private String mType;
 
+    @JsonProperty("url")
+    private String mUrl;
+
+    public MarvelUrl() {
+        //Empty constructor needed by Jackson
+    }
+
     public String getType() {
         return mType;
     }
 
-    @JsonProperty("url")
-    private String mUrl;
-
     public String getUrl() {
         return mUrl;
-    }
-
-    public MarvelUrl() {
     }
 
     protected MarvelUrl(Parcel in) {
@@ -51,35 +52,38 @@ public class MarvelUrl implements Parcelable {
         return 0;
     }
 
+
+    //region Equals, hashCode, toString
+
     @JsonIgnore
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MarvelUrl marvelUrl = (MarvelUrl) o;
-        return Objects.equal(CREATOR, marvelUrl.CREATOR) &&
-                Objects.equal(mType, marvelUrl.mType) &&
+        return Objects.equal(mType, marvelUrl.mType) &&
                 Objects.equal(mUrl, marvelUrl.mUrl);
     }
 
     @JsonIgnore
     @Override
     public int hashCode() {
-        return Objects.hashCode(CREATOR, mType, mUrl);
+        return Objects.hashCode(mType,
+                mUrl);
     }
 
     @JsonIgnore
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("CREATOR", CREATOR)
                 .add("mType", mType)
                 .add("mUrl", mUrl)
                 .toString();
     }
 
-    private static final class ClassCreator implements Creator<MarvelUrl> {
+    //endregion
 
+    private static final class ClassCreator implements Creator<MarvelUrl> {
         @Override
         public MarvelUrl createFromParcel(Parcel in) {
             return new MarvelUrl(in);
@@ -89,6 +93,5 @@ public class MarvelUrl implements Parcelable {
         public MarvelUrl[] newArray(int size) {
             return new MarvelUrl[size];
         }
-
     }
 }

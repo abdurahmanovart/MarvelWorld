@@ -2,6 +2,7 @@ package com.github.abdurahmanovart.marvelworld.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,32 +18,18 @@ public class Comic implements Parcelable {
     public static final ClassCreator CREATOR = new ClassCreator();
 
     @JsonProperty("resourceURI")
-    private String mResourceUri;
-
-    public String getResourceUri() {
-        return mResourceUri;
-    }
+    private String mResourceURI;
 
     @JsonProperty("name")
     private String mName;
 
-    public String getName() {
-        return mName;
-    }
-
     public Comic() {
+        //empty constructor needed by Jackson
     }
 
     protected Comic(Parcel in) {
-        mResourceUri = in.readString();
+        mResourceURI = in.readString();
         mName = in.readString();
-    }
-
-    @JsonIgnore
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mResourceUri);
-        dest.writeString(mName);
     }
 
     @JsonIgnore
@@ -53,28 +40,50 @@ public class Comic implements Parcelable {
 
     @JsonIgnore
     @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mResourceURI);
+        dest.writeString(mName);
+    }
+
+    @NonNull
+    public String getResourceURI() {
+        return mResourceURI;
+    }
+
+    @NonNull
+    public String getName() {
+        return mName;
+    }
+
+    //region Equals, hashCode, toString
+
+    @JsonIgnore
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comic comic = (Comic) o;
-        return Objects.equal(mResourceUri, comic.mResourceUri) &&
+        return Objects.equal(mResourceURI, comic.mResourceURI) &&
                 Objects.equal(mName, comic.mName);
     }
 
     @JsonIgnore
     @Override
     public int hashCode() {
-        return Objects.hashCode(mResourceUri, mName);
+        return Objects.hashCode(mResourceURI,
+                mName);
     }
 
     @JsonIgnore
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("mResourceUri", mResourceUri)
+                .add("mResourceURI", mResourceURI)
                 .add("mName", mName)
                 .toString();
     }
+
+    //endregion
 
     private static final class ClassCreator implements Creator<Comic> {
         @Override

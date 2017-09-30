@@ -2,6 +2,7 @@ package com.github.abdurahmanovart.marvelworld.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,33 +21,19 @@ public class Comics implements Parcelable {
     public static final ClassCreator CREATOR = new ClassCreator();
 
     @JsonProperty("collectionURI")
-    private String mCollectionUri;
-
-    public String getCollectionUri() {
-        return mCollectionUri;
-    }
+    private String mCollectionURI;
 
     @JsonProperty("items")
     private List<Comic> mComicList;
 
-    public List<Comic> getComicList() {
-        return mComicList;
-    }
-
     public Comics() {
-        //Empty constructor needed by Jackson
+        //empty constructor needed by Jackson
     }
 
     protected Comics(Parcel in) {
-        mCollectionUri = in.readString();
+        mCollectionURI = in.readString();
         mComicList = new ArrayList<>();
-        in.readList(mComicList, null);
-    }
-
-    @JsonIgnore
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mCollectionUri);
+        in.readTypedList(mComicList, Comic.CREATOR);
     }
 
     @JsonIgnore
@@ -57,31 +44,52 @@ public class Comics implements Parcelable {
 
     @JsonIgnore
     @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mCollectionURI);
+        dest.writeTypedList(mComicList);
+    }
+
+    @NonNull
+    public String getCollectionURI() {
+        return mCollectionURI;
+    }
+
+    @NonNull
+    public List<Comic> getComicList() {
+        return mComicList;
+    }
+
+    //region Equals, hashCode, toString
+
+    @JsonIgnore
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comics comics = (Comics) o;
-        return Objects.equal(mCollectionUri, comics.mCollectionUri) &&
+        return Objects.equal(mCollectionURI, comics.mCollectionURI) &&
                 Objects.equal(mComicList, comics.mComicList);
     }
 
     @JsonIgnore
     @Override
     public int hashCode() {
-        return Objects.hashCode(mCollectionUri, mComicList);
+        return Objects.hashCode(mCollectionURI,
+                mComicList);
     }
 
     @JsonIgnore
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("mCollectionUri", mCollectionUri)
+                .add("mCollectionURI", mCollectionURI)
                 .add("mComicList", mComicList)
                 .toString();
     }
 
-    private static final class ClassCreator implements Creator<Comics> {
+    //endregion
 
+    private static final class ClassCreator implements Creator<Comics> {
         @Override
         public Comics createFromParcel(Parcel in) {
             return new Comics(in);

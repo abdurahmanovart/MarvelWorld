@@ -2,6 +2,7 @@ package com.github.abdurahmanovart.marvelworld.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,29 +18,13 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseData<T> implements Parcelable {
 
-    public ResponseData() {
-        //Empty constructor needed by Jackson
-    }
+    public static final ClassCreator CREATOR = new ClassCreator();
 
     @JsonProperty("results")
     private List<T> mCharacterList;
 
-    public List<T> getCharacterList() {
-        return mCharacterList;
-    }
-
-    public static final ClassCreator CREATOR = new ClassCreator();
-
-    public static final class ClassCreator implements Creator<ResponseData> {
-        @Override
-        public ResponseData createFromParcel(Parcel in) {
-            return new ResponseData(in);
-        }
-
-        @Override
-        public ResponseData[] newArray(int size) {
-            return new ResponseData[size];
-        }
+    public ResponseData() {
+        //empty constructor needed by Jackson
     }
 
     protected ResponseData(Parcel in) {
@@ -49,15 +34,22 @@ public class ResponseData<T> implements Parcelable {
 
     @JsonIgnore
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(mCharacterList);
+    public int describeContents() {
+        return 0;
     }
 
     @JsonIgnore
     @Override
-    public int describeContents() {
-        return 0;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeList(mCharacterList);
     }
+
+    @NonNull
+    public List<T> getCharacterList() {
+        return mCharacterList;
+    }
+
+    //region Equals, hashCode, toString
 
     @JsonIgnore
     @Override
@@ -80,5 +72,19 @@ public class ResponseData<T> implements Parcelable {
         return Objects.toStringHelper(this)
                 .add("mCharacterList", mCharacterList)
                 .toString();
+    }
+
+    //endregion
+
+    private static final class ClassCreator implements Creator<ResponseData> {
+        @Override
+        public ResponseData createFromParcel(Parcel in) {
+            return new ResponseData(in);
+        }
+
+        @Override
+        public ResponseData[] newArray(int size) {
+            return new ResponseData[size];
+        }
     }
 }

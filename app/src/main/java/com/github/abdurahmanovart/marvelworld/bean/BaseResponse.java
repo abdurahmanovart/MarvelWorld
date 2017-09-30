@@ -2,6 +2,7 @@ package com.github.abdurahmanovart.marvelworld.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,25 +21,22 @@ public class BaseResponse<T> implements Parcelable {
     @JsonProperty("code")
     private int mCode;
 
-    public int getCode() {
-        return mCode;
-    }
-
     @JsonProperty("data")
     private ResponseData<T> mResponseData;
-
-    public ResponseData getResponseData() {
-        return mResponseData;
-    }
 
     public BaseResponse() {
         //Empty constructor needed by Jackson
     }
 
-
     protected BaseResponse(Parcel in) {
         mCode = in.readInt();
         mResponseData = in.readParcelable(ResponseData.class.getClassLoader());
+    }
+
+    @JsonIgnore
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @JsonIgnore
@@ -48,11 +46,16 @@ public class BaseResponse<T> implements Parcelable {
         dest.writeParcelable(mResponseData, flags);
     }
 
-    @JsonIgnore
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getCode() {
+        return mCode;
     }
+
+    @NonNull
+    public ResponseData<T> getResponseData() {
+        return mResponseData;
+    }
+
+    //region Equals, hashCode, toString
 
     @JsonIgnore
     @Override
@@ -67,7 +70,8 @@ public class BaseResponse<T> implements Parcelable {
     @JsonIgnore
     @Override
     public int hashCode() {
-        return Objects.hashCode(mCode, mResponseData);
+        return Objects.hashCode(mCode,
+                mResponseData);
     }
 
     @JsonIgnore
@@ -78,6 +82,8 @@ public class BaseResponse<T> implements Parcelable {
                 .add("mResponseData", mResponseData)
                 .toString();
     }
+
+    //endregion
 
     private static final class ClassCreator implements Creator<BaseResponse> {
         @Override

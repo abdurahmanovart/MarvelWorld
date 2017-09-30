@@ -68,7 +68,6 @@ class Thumbnail implements Parcelable {
     }
 
     /**
-     *
      * @param size one of the supported sizes
      * @return full path to image
      */
