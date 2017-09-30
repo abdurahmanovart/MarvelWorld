@@ -12,9 +12,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * @author Likhtman Hanna on 19.08.2017.
- */
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterViewHolder> {
 

@@ -10,9 +10,6 @@ import com.github.abdurahmanovart.marvelworld.bean.MarvelUrl;
 
 import java.util.List;
 
-/**
- * @author Likhtman Hanna on 03.09.2017.
- */
 
 public class MarvelUrlAdapter extends RecyclerView.Adapter<MarvelUrlViewHolder> {
 

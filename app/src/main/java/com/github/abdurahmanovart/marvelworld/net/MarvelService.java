@@ -14,6 +14,7 @@ import retrofit2.http.Url;
  */
 
 public interface MarvelService {
+
     @GET("v1/public/characters")
     Call<BaseResponse<MarvelCharacter>> getCharacters(@Query("nameStartsWith") String nameStartsWith,
                                                       @Query("apikey") String apiKey,
@@ -22,7 +23,7 @@ public interface MarvelService {
 
     @GET
     Call<BaseResponse<MarvelResource>> getMarvelResources(@Url String path,
-                                                          @Query("apikey") String apiKey,
                                                           @Query("ts") int timeStamp,
-                                                          @Query("hash") String hash);
+                                                          @Query("hash") String hash,
+                                                          @Query("apikey") String apiKey);
 }

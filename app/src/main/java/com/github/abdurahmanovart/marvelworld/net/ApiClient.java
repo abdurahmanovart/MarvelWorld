@@ -8,7 +8,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  */
 
 public class ApiClient {
-    public static final String BASE_URL = "http://gateway.marvel.com";
+    public static final String BASE_URL = "http://gateway.marvel.com/";
     private static Retrofit sRetrofit;
 
     private ApiClient() {

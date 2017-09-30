@@ -2,6 +2,7 @@ package com.github.abdurahmanovart.marvelworld.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,18 +15,17 @@ import com.google.common.base.Objects;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Thumbnail implements Parcelable {
+public class Thumbnail implements Parcelable {
 
     @StringDef({STANDARD_MEDIUM,
-            LANDSCAPE_AMAZING,
+            LANDSCAPE_INCREDIBLE,
             PORTRAIT_FANTASTIC
     })
 
-    public @interface ThumbnailSize {
-    }
+    private @interface ThumbnailSize {}
 
     public static final String STANDARD_MEDIUM = "standard_medium";
-    public static final String LANDSCAPE_AMAZING = "landscape_amazing";
+    public static final String LANDSCAPE_INCREDIBLE = "detail";
     public static final String PORTRAIT_FANTASTIC = "portrait_fantastic";
 
     public static final ClassCreator CREATOR = new ClassCreator();
@@ -33,20 +33,11 @@ class Thumbnail implements Parcelable {
     @JsonProperty("path")
     private String mPath;
 
-    public String getPath() {
-        return mPath;
-    }
-
     @JsonProperty("extension")
     private String mExtension;
 
-    public String getExtension() {
-        return mExtension;
-    }
-
-
     public Thumbnail() {
-        //Empty constructor needed by Jackson
+        //empty constructor needed bu Json
     }
 
     protected Thumbnail(Parcel in) {
@@ -56,15 +47,25 @@ class Thumbnail implements Parcelable {
 
     @JsonIgnore
     @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @JsonIgnore
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mPath);
         dest.writeString(mExtension);
     }
 
-    @JsonIgnore
-    @Override
-    public int describeContents() {
-        return 0;
+    @NonNull
+    public String getPath() {
+        return mPath;
+    }
+
+    @NonNull
+    public String getExtension() {
+        return mExtension;
     }
 
     /**
@@ -75,6 +76,8 @@ class Thumbnail implements Parcelable {
     public String getFullPath(@ThumbnailSize String size) {
         return mPath + "/" + size + "." + mExtension;
     }
+
+    //region Equals, hashCode, toString
 
     @JsonIgnore
     @Override
@@ -89,7 +92,8 @@ class Thumbnail implements Parcelable {
     @JsonIgnore
     @Override
     public int hashCode() {
-        return Objects.hashCode(mPath, mExtension);
+        return Objects.hashCode(mPath,
+                mExtension);
     }
 
     @JsonIgnore
@@ -100,6 +104,8 @@ class Thumbnail implements Parcelable {
                 .add("mExtension", mExtension)
                 .toString();
     }
+
+    //endregion
 
     private static final class ClassCreator implements Creator<Thumbnail> {
         @Override

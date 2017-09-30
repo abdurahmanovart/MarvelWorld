@@ -9,9 +9,6 @@ import com.github.abdurahmanovart.marvelworld.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * @author Likhtman Hanna on 03.09.2017.
- */
 
 public class MarvelUrlViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

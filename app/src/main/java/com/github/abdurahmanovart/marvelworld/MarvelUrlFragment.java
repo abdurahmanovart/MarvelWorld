@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MarvelUrlFragment extends Fragment implements CharacterClickListener {
+public class MarvelUrlFragment extends Fragment implements CharacterClickListener{
 
     private static final String EXTRA_MARVEL_URLS = "extra_marvel_urls";
 

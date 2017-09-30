@@ -52,7 +52,7 @@ public class CharacterActivity extends AppCompatActivity implements MarvelUrlFra
     }
 
     private void fillUI() {
-        Picasso.with(this).load(mMarvelCharacter.getThumbnail().getFullPath(Thumbnail.LANDSCAPE_AMAZING))
+        Picasso.with(this).load(mMarvelCharacter.getThumbnail().getFullPath(Thumbnail.LANDSCAPE_INCREDIBLE))
                 .into(mImageView);
         mNameTextView.setText(mMarvelCharacter.getName());
         mDescriptionTextView.setText(mMarvelCharacter.getDescription());
