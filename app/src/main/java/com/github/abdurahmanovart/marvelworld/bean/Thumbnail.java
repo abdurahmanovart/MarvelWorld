@@ -22,7 +22,8 @@ public class Thumbnail implements Parcelable {
             PORTRAIT_FANTASTIC
     })
 
-    private @interface ThumbnailSize {}
+    private @interface ThumbnailSize {
+    }
 
     public static final String STANDARD_MEDIUM = "standard_medium";
     public static final String LANDSCAPE_INCREDIBLE = "detail";
