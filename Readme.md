@@ -13,9 +13,17 @@ Then user is able to see character's details if present. They are :
 
 - main image in high resolution
 - some short description
+
+![demo](/art/search_deadpool.gif)
+
 - list of comics character has participated
+
+![demo](art/comics_deadpool.gif)
+
 - comics preview when tapped on the comics nomination (1 or more pics available to see by swiping)
 - outer links to go and see in browser some more info
+
+![demo](art/links_deadpool.gif)
 
 also app saves search results so you can go back in stack and see them.
 
